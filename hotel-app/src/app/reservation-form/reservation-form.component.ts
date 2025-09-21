@@ -8,4 +8,12 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 })
 export class ReservationFormComponent {
   reservationForm: FormGroup = new FormGroup({});
+
+  onSubmit() {
+    if (this.reservationForm.valid) {
+      alert(this.reservationForm.value);
+    } else {
+      console.log("Form is invalid");
+    }
+  }
 }

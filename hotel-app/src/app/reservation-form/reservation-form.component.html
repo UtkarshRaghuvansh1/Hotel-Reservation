@@ -1,15 +1,24 @@
-<form action="" [formGroup]="reservationForm">
-  <label for="name">Name:</label>
-  <input id="name" formControlName="name" type="text" />
-
-  <label for="email">Email:</label>
-  <input id="email" formControlName="email" type="email" />
-
-  <label for="checkin">Check-in Date:</label>
-  <input id="checkin" formControlName="checkin" type="date" />
-
-  <label for="checkout">Check-out Date:</label>
-  <input id="checkout" formControlName="checkout" type="date" />
+<form action="" [formGroup]="reservationForm" (ngSubmit)="onSubmit()">
+    <div>
+        <label for="">Check-in Date:</label>
+        <input type="date" formControlName="checkInDate">
+    </div>
+    <div>
+        <label for="">Check-out Date:</label>
+        <input type="date" formControlName="checkOutDate">
+    </div>
+    <div>
+        <label for="">Guest Name:</label>
+        <input type="text" formControlName="guestName" >
+    </div>
+    <div>
+        <label for="" formControlName="guestEmail">Guest Email:</label>
+        <input type="email">
+    </div>
+    <div>
+        <label for="">Room Number:</label>
+         <input type="number" formControlName="roomNumber" >
+    </div>
 
   <button type="submit">Submit Reservation</button>
     
