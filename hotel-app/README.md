@@ -299,4 +299,72 @@ constructor(private formBuilder: FormBuilder) { }
 
 - Combining both ensures error message appears only after user interaction.
 
+## Creating reservation Services
+### `ReservationService`
+
+This service is responsible for managing reservation data. It provides methods for performing **CRUD** (Create, Read, Update, Delete) operations on a collection of `Reservations` objects.
+
+---
+
+## 🔑 Key Features
+
+- **Data Management**: Handles all reservation data, ensuring a single source of truth for the application.
+- **Dependency Injection**: Can be injected into any component or other service using Angular's dependency injection system, thanks to the `@Injectable` decorator.
+- **CRUD Operations**: Exposes a clear API for interacting with reservation data.
+
+---
+
+## 📁 `Reservation` Model
+
+The service operates on data structured according to the `Reservation` model.
+```typescript
+interface Reservation {
+  id: string;
+  // Other properties like name, dates, etc.
+}
+
+
+import { Reservations } from '../models/reservations';
+
+@Injectable({
+  providedIn: 'root'
+})
+export class ReservationService {
+
+  private reservations: Reservations[] = [];
+
+  // CRUD operations
+
+  // Getting all the reservation
+  getReservations(): Reservations[] {
+    return this.reservations;
+  }
+
+  //find specific reservation by id
+  getReservation(id: string): Reservations | undefined {
+     return this.reservations.find(reservation => reservation.id === id);
+  }
+
+  // To add a new reservation
+  addReservation(reservation: Reservations): void {
+    this.reservations.push(reservation);
+  }
+
+  // To delete a reservation
+  deleteReservation(id: string): void {
+    const indexToDelete = this.reservations.findIndex(reservation => reservation.id === id); // get index of reservation to be deleted
+    if (indexToDelete !== -1)
+      this.reservations.splice(indexToDelete, 1);// delete reservation at that index
+  }
+
+  // To update a reservation
+  updateReservation(updatedReservation: Reservations): void {
+   const indexToUpdate = this.reservations.findIndex(reservation => reservation.id === updatedReservation.id);
+   if (indexToUpdate !== -1)
+     this.reservations[indexToUpdate] = updatedReservation;
+  }
+}
+
+```
+
 
