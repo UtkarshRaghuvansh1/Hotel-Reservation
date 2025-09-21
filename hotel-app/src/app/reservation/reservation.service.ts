@@ -44,8 +44,8 @@ export class ReservationService {
   }
 
   // To update a reservation
-  updateReservation(updatedReservation: Reservations): void {
-   const indexToUpdate = this.reservations.findIndex(reservation => reservation.id === updatedReservation.id);
+  updateReservation(id:string, updatedReservation: Reservations): void {
+   const indexToUpdate = this.reservations.findIndex(reservation => reservation.id === id); // get index of reservation to be updated
    if (indexToUpdate !== -1)
      this.reservations[indexToUpdate] = updatedReservation;
 
