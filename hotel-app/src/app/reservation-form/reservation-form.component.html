@@ -21,8 +21,8 @@
         </div>
     </div>
     <div>
-        <label for="" formControlName="guestEmail">Guest Email:</label>
-        <input type="email" forControlName="guestEmail" >
+        <label for="" >Guest Email:</label>
+        <input type="email" formControlName="guestEmail" >
         <div *ngIf="reservationForm.get('guestEmail')?.invalid && reservationForm.get('guestEmail')?.touched">
             Guest Email is required 
         </div>
@@ -35,6 +35,6 @@
         </div>
     </div>
 
-  <button type="submit">Submit Reservation</button>
+  <button type="submit" [disabled]="reservationForm.invalid">Submit Reservation</button>
     
 </form>

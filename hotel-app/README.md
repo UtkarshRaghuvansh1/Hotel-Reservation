@@ -367,4 +367,12 @@ export class ReservationService {
 
 ```
 
+### Injecting the reservation services into form component 
+- in reservation form component.ts  we want on submit reservation to get added
+- call service in onsubmit, first we need to inject it in constructor
+- import the reservation service in form component 
+- grab the instance of the reservation srrvice, so in constructor inject reservatio service
+- when we create form component angualr deendency injection will inject an instance
+- iin on submit take the value of reservation added, put it in add reservation
+
 
