@@ -10,7 +10,9 @@ import { Reservations } from '../models/reservations';
 export class ReservationListComponent implements OnInit {
   reservations: Reservations[] = [];
 
-  constructor(private reservationService: ReservationService) {}
+  constructor(
+    private reservationService: ReservationService
+  ) {}
 
   ngOnInit(): void {
     this.reservations = this.reservationService.getReservations();
