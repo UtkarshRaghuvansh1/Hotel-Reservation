@@ -8,6 +8,11 @@ export class ReservationService {
 
   private reservations: Reservations[] = [];
 
+  constructor() {
+    let savedReservations = localStorage.getItem('reservations');
+    this.reservations = savedReservations ? JSON.parse(savedReservations) : [];
+  }
+
   // CRUD operations
 
   // Getting all the reservation
@@ -22,7 +27,11 @@ export class ReservationService {
 
   // To add a new reservation
   addReservation(reservation: Reservations): void {
+
+    reservation.id = Date.now().toString(); 
+    
     this.reservations.push(reservation);
+    localStorage.setItem('reservations', JSON.stringify(this.reservations));
   }
 
   // To delete a reservation
@@ -30,6 +39,8 @@ export class ReservationService {
     const indexToDelete = this.reservations.findIndex(reservation => reservation.id === id); // get index of reservation to be deleted
     if (indexToDelete !== -1)
       this.reservations.splice(indexToDelete, 1);// delete reservation at that index
+
+    localStorage.setItem('reservations', JSON.stringify(this.reservations));
   }
 
   // To update a reservation
@@ -37,5 +48,7 @@ export class ReservationService {
    const indexToUpdate = this.reservations.findIndex(reservation => reservation.id === updatedReservation.id);
    if (indexToUpdate !== -1)
      this.reservations[indexToUpdate] = updatedReservation;
+
+   localStorage.setItem('reservations', JSON.stringify(this.reservations));
   }
 }
