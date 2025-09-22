@@ -375,4 +375,168 @@ export class ReservationService {
 - when we create form component angualr deendency injection will inject an instance
 - iin on submit take the value of reservation added, put it in add reservation
 
+### add local storage to store all our reservation 
+
+- for adding deleteing updating info use setItem in serices function 
+
+  // To add a new reservation
+  addReservation(reservation: Reservations): void {
+    this.reservations.push(reservation);
+    localStorage.setItem('reservations', JSON.stringify(this.reservations));
+  }
+
+- for loading the info we use ngOnInit lifecycle hook
+- create a constructor in services ts file 
+- this contructor will be loaded before ng on init life cycle hook
+  constructor() {
+    const savedReservations = localStorage.getItem('reservations');
+    if (savedReservations) {
+      this.reservations = JSON.parse(savedReservations);
+    }
+  }
+
+- for getting the info use getItem in srvices method
+
+
+### Showing all the reservation list
+
+- import oninit lifecycle hook, reservations services, reservation interface in this component
+- create a constructure to grab instance of service
+
+
+### ngTemplate and ngIF
+
+- A template reference variable is created with a hash # in your HTML.
+- It gives you a way to refer to a DOM element or an Angular directive/component inside the template.
+
+``` html
+<h2>Reservation List</h2>
+
+<ul *ngIf="reservations.length > 0; else noReservations">
+  <li *ngFor="let reservation of reservations">
+    Guest: {{ reservation.guestName }} - Room: {{ reservation.roomNumber }}
+  </li>
+</ul>
+
+<ng-template #noReservations>
+  <p>No reservations found.</p>
+</ng-template>
+
+```
+
+### Using the router navigate method to redirect the user
+
+- once reservation is created, redirect user to list view 
+- import router in form component ts file 
+- after adding router we can call a method call navigate but before that we have to grab instance of router 
+- declare instace of router in constructor
+- use navigate on on submit function to navigate from form to list 
+
+``` typescript
+     // navigate to reservation list after adding
+      this.router.navigate(['/list']);
+```
+
+### Deleting Reservations
+
+- in reservation list add delete button to delete the reservation
+- inlist component ts file create a function to delete the reservation 
+``` typescript
+  deleteReservation(id: string) {
+    this.reservationService.deleteReservation(id);
+    this.reservations = this.reservationService.getReservations(); // refresh the list
+  }
+
+```
+- Now we can create,read and delete only updating is left 
+- for updating we need to firdt read then edit 
+
+### Update a Reservation 
+
+- for updating reservation we need an id of particular reservation so that we can edit that reservation
+- if we are using DB primary key will automatically get assigned as id
+- in addReservation function under services 
+
+``` typecript
+    reservation.id = Date.now().toString(); 
+```
+
+### editing a reservation
+
+- add a edit route path with parameter in app-routing.module.ts
+- provide id (which reservation we want to edit) 
+- later read the id from URL/Route and then use that to grab the item from service 
+``` typescript
+    const routes: Routes = [
+  {path: '', component:HomeComponent},
+  {path: 'list', component:ReservationListComponent},
+  {path: 'new', component:ReservationFormComponent},
+  {path: 'edit/:id', component:ReservationFormComponent}
+]
+```
+
+- add router module in reservation.module.ts
+``` typescript
+  imports: [
+    CommonModule,
+    FormsModule,
+    ReactiveFormsModule,
+    RouterModule
+  ]
+```
+
+- In list component html add edit button eith routerLink attribute provide path for it 
+- for this we need to import reouter module in reservation.module.ts
+``` html
+     <button [routerLink]="['./edit',reservation.id]">Edit</button>
+```
+
+- Now on cliking on edit it will redirect to forms module and in URL it will /edit/12344455(id)
+
+### Editing Reservation
+
+- now we have id fill the form based on that id then edit it 
+- in form component ts import activated route and create instance by dependemcy injection in constructor 
+- now in in ngonit we check if we get the id
+
+``` typescript
+let id = this.activatedRoute.snapshot.paramMap.get('id');
+    if (id) {
+      let reservation = this.reservationService.getReservation(id);
+      if (reservation) {
+        this.reservationForm.patchValue(reservation);
+      }
+    }
+```
+- now if I edit form it will create new reservation but we want to if id already existed then update that dont create new one
+- on submit funxtion if there is id just use update reservation if not then add reservatio 
+``` typescript
+onSubmit() {
+     if(this.reservationForm.valid){
+
+      let reservation: Reservations  = this.reservationForm.value;
+
+      let id = this.activatedRoute.snapshot.paramMap.get('id')
+
+      if(id){
+        // Update
+        this.reservationService.updateReservation(id, reservation)
+      } else {
+        // New
+        this.reservationService.addReservation(reservation)   
+
+      }
+
+      this.router.navigate(['/list'])
+    }
+  }
+```
+
+### Combining Components from different modules 
+- now for navigation from one page to another we need t change the url 
+- but we wnat it in such a way that home component should always be there for creating and viewing the reservation and form and list component change accroding to user changes 
+- in reservation module we want have to use homw module so we need to import it and in order to use home module we need to export the home component in home module.ts so that other components can use it 
+
+
+
 
